@@ -1,5 +1,5 @@
 <template>
-  <el-row form-main-container>
+  <el-row class="form-main-container">
     <el-row class="form-container">
       <el-row class="form-header">
         <h1>{{ isEditable ? $t('formEditTitle') : $t('formAddTitle') }}</h1>
@@ -141,11 +141,14 @@ export default {
       types: Constants.EMPLOYEE_TYPE_LIST,
       formRules: Constants.EMPLOYEE_FORM_RULES,
       isEditable: false,
-      formData: {}
+      formData: {},
+      tableData: [],
+      record: JSON.parse(localStorage.getItem('record'))
     }
   },
   mounted() {
-    const record = JSON.parse(localStorage.getItem('record')) || []
+    const record = JSON.parse(localStorage.getItem('record')) || {}
+    this.tableData = JSON.parse(localStorage.getItem('employeeList')) || []
     this.formData = !_.isEmpty(record.id) ? _.cloneDeep(record) : Constants.EMPLOYEE_DETAIL
     this.isEditable = !_.isEmpty(record.id)
     this.isLoaded = true
@@ -153,15 +156,24 @@ export default {
   methods: {
     handleCancelClick() {
       this.$router.push('/')
+      localStorage.removeItem('record')
     },
     handleSaveClick() {
       this.$refs.formData.validate((valid) => {
         if (valid) {
           const payload = _.cloneDeep(this.formData)
+          const dataIndex = this.tableData.findIndex(item => item.id === payload.id)
           if (_.isEmpty(payload.id)) {
             payload.id = uuidv4()
           }
-          localStorage.setItem('payload', payload)
+          if (dataIndex !== -1) {
+            this.tableData.splice(dataIndex, 1, payload)
+            localStorage.removeItem('record')
+          } else {
+            this.tableData.push(payload)
+          }
+          localStorage.setItem('employeeList', JSON.stringify(this.tableData))
+          this.$message({ type: 'success', message: this.$t('saveMessageStart') + ` ` + `${dataIndex !== -1 ? this.$t('updateMessage') : this.$t('addMessage')}` + ` ` + this.$t('saveMessageEnd') })
           this.$router.push('/')
           this.$refs.formData.resetFields()
         }
@@ -181,5 +193,20 @@ export default {
 
 .el-button.el-button--default {
   margin-left: 320px;
+}
+
+.form-main-container {
+  display: flex;
+  margin: auto;
+  place-content: center;
+  padding: 30px;
+}
+
+.form-container {
+  padding-bottom: 35px;
+  padding-left: 135px;
+  padding-top: 35px;
+  padding-right: 135px;
+  border: 2px solid black;
 }
 </style>

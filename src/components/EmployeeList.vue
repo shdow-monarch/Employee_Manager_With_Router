@@ -2,10 +2,10 @@
   <el-row class="main-container">
     <el-row class="header-container">
       <el-col :lg="12" :md="12" :sm="12" :xs="12">
-        <h1 class="header-title">{{$t('listTitle')}}</h1>
+        <h1 class="header-title">{{ $t('listTitle') }}</h1>
       </el-col>
       <el-col :lg="12" :md="12" :sm="12" :xs="12">
-        <el-button @click="handleAddClick()" type="success" class="add-btn">{{$t('listAddButton')}}</el-button>
+        <el-button @click="handleAddClick()" type="success" class="add-btn">{{ $t('listAddButton') }}</el-button>
       </el-col>
     </el-row>
     <el-row class="table-container">
@@ -25,7 +25,8 @@
           <el-table-column prop="zipCode" :label="$t('zipCodeLabel')" width="150"></el-table-column>
         </el-table-column>
         <el-table-column :label="$t('employeeDetailsTitle')" align="center">
-          <el-table-column prop="employeeDetails.department" :label="$t('departmentLabel')" width="150"></el-table-column>
+          <el-table-column prop="employeeDetails.department" :label="$t('departmentLabel')" width="150">
+          </el-table-column>
           <el-table-column prop="employeeDetails.position" :label="$t('positionLabel')" width="150">
           </el-table-column>
           <el-table-column prop="employeeDetails.skills" :label="$t('skillsLabel')" width="150">
@@ -54,8 +55,9 @@
         </el-table-column>
         <el-table-column :label="$t('tableActionsLabel')" fixed="right" width="180" align="center">
           <template slot-scope="scope">
-            <el-button @click="handleEditClick(scope.row)" size="mini">{{$t('editButton')}}</el-button>
-            <el-button @click="handleDeleteClick(scope.row.id)" type="danger" size="mini">{{$t('deleteButton')}}</el-button>
+            <el-button @click="handleEditClick(scope.row)" size="mini">{{ $t('editButton') }}</el-button>
+            <el-button @click="handleDeleteClick(scope.row.id)" type="danger" size="mini">{{ $t('deleteButton') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -78,39 +80,27 @@ export default {
     this.tableData = JSON.parse(localStorage.getItem('employeeList')) || []
   },
   methods: {
-    handleAddClick () {
+    handleAddClick() {
       this.$router.push('/form')
     },
-    handleEditClick (row) {
+    handleEditClick(row) {
       localStorage.setItem('record', JSON.stringify(row))
       this.$router.push('/form')
     },
-    handleDeleteClick (rowId) {
+    handleDeleteClick(rowId) {
       this.$confirm('This will delete employee information. Continue?',
         'Warning', {
-          confirmButtonText: 'Yes',
-          cancelButtonText: 'No',
-          type: 'warning'
-        }).then(() => {
-          const index = this.tableData.findIndex(item => item.id === rowId)
-          this.tableData.splice(index, 1)
-          localStorage.setItem('employeeList', JSON.stringify(this.tableData))
-          this.$message({ type: 'success', message: this.$t('deleteMessage') })
-        }).catch(() => {
-          this.$message({ type: 'info', message: this.$t('deleteCancelMessage') })
-        })
-    },
-    handleSaveClick () {
-      const formData = localStorage.getItem('payload')
-      const dataIndex = this.tableData.findIndex(item => item.id === formData.id)
-      if (dataIndex !== -1) {
-        this.tableData.splice(dataIndex, 1, formData)
-      } else {
-        this.tableData.push(formData)
-      }
-      localStorage.setItem('employeeList', JSON.stringify(this.tableData))
-
-      this.$message({ type: 'success', message: this.$t('saveMessageStart')+  ` ` + `${dataIndex !== -1 ? this.$t('updateMessage') : this.$t('addMessage')}` + ` ` + this.$t('saveMessageEnd') })
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        type: 'warning'
+      }).then(() => {
+        const index = this.tableData.findIndex(item => item.id === rowId)
+        this.tableData.splice(index, 1)
+        localStorage.setItem('employeeList', JSON.stringify(this.tableData))
+        this.$message({ type: 'success', message: this.$t('deleteMessage') })
+      }).catch(() => {
+        this.$message({ type: 'info', message: this.$t('deleteCancelMessage') })
+      })
     }
   }
 }
