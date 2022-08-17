@@ -72,7 +72,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="employeeDetails.skills" label="Skills">
+          <el-form-item prop="employeeDetails.skills" :label="$t('skillsLabel')">
             <el-select v-model="formData.employeeDetails.skills" multiple placeholder=" Select">
               <el-option v-for="(item, index) in skillsList" :key="index" :value="item.name" :label="item.displayName">
               </el-option>
