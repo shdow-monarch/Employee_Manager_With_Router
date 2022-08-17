@@ -156,7 +156,6 @@ export default {
   methods: {
     handleCancelClick() {
       this.$router.push('/')
-      localStorage.removeItem('record')
     },
     handleSaveClick() {
       this.$refs.formData.validate((valid) => {
@@ -168,7 +167,6 @@ export default {
           }
           if (dataIndex !== -1) {
             this.tableData.splice(dataIndex, 1, payload)
-            localStorage.removeItem('record')
           } else {
             this.tableData.push(payload)
           }

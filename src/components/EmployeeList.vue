@@ -81,6 +81,7 @@ export default {
   },
   methods: {
     handleAddClick() {
+      localStorage.removeItem('record')
       this.$router.push('/form')
     },
     handleEditClick(row) {
