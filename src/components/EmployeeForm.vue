@@ -117,8 +117,9 @@
         </el-row>
         <el-form-item>
           <el-row class="form-footer">
-            <el-button @click="handleCancelClick">Cancel</el-button>
-            <el-button @click="handleSaveClick()" type="success">{{ isEditable ? 'Save' : 'Add' }}</el-button>
+            <el-button @click="handleCancelClick">{{ $t('cancelButton') }}</el-button>
+            <el-button @click="handleSaveClick()" type="success">{{ isEditable ? $t('saveButton') : $t('addButton') }}
+            </el-button>
           </el-row>
         </el-form-item>
       </el-form>
